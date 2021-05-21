@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Faker\Generator as Faker;
 use App\Post;
-use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class PostSeeder extends Seeder
 {
@@ -11,42 +12,23 @@ class PostSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(Faker $faker)
     {
-        $posts = [
-            [
-                'title' => 'Come fare per',
-                'topic' => 'marketing',
-                'author' => 'John',
-                'date' => '2021-06-05',
-                'description' => 'lorem ipsum'
-            ],
-            [
-                'title' => 'Come fare quando',
-                'topic' => 'seo',
-                'author' => 'Jenny',
-                'date' => '2021-06-04',
-                'description' => 'lorem ipsum'
-            ],
-            [
-                'title' => 'Come fare se',
-                'topic' => 'Advertising',
-                'author' => 'Sam',
-                'date' => '2021-06-12',
-                'description' => 'lorem ipsum dolor'
-            ]
-        ];
+       for ($i = 0; $i < 10; $i++) {
+        $new_post = new Post();
 
-        foreach ($posts as $post) {
-            $new_post = new Post();
+        $new_post->title = $faker->sentence(rand(2,6));
+        $new_post->topic = $faker->word();
+        $new_post->author = $faker->word();
+        $new_post->date = $faker->dateTime();
+        $new_post->description = $faker->paragraph();
+        
+        $slug = Str::slug($new_post->title, '-');
+        $new_post->$slug = $slug;
 
-            $new_post->title = $post['title'];
-            $new_post->topic = $post['topic'];
-            $new_post->author = $post['author'];
-            $new_post->date = Carbon::createFromFormat('Y-m-d', $post['date'])->toDateTimeString();
-            $new_post->description = $post['description'];
+        $new_post->save();
+       }
 
-            $new_post->save();
-        }
+    
     }
 }
