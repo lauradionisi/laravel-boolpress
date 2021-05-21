@@ -23,8 +23,22 @@ class PostSeeder extends Seeder
         $new_post->date = $faker->dateTime();
         $new_post->description = $faker->paragraph();
         
+        // creazione slug
         $slug = Str::slug($new_post->title, '-');
-        $new_post->$slug = $slug;
+        $slug_base = $slug;
+
+        // verifica che lo slug non esista nel db
+        $post_presente = Post::where('slug', $slug)->first();
+        $contatore = 1;
+
+        while($post_presente) {
+            $slug = $slug_base . '-' . $contatore;
+            $contatore++;
+            $post_presente = Post::where('slug', $slug)->first();
+        }
+
+        $new_post->slug = $slug;
+        $new_post->user_id = 1;
 
         $new_post->save();
        }
