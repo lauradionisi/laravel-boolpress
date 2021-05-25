@@ -4,11 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h1>{{$post->title}}</h1>
-            <p>
-                {{ $post->description }}
-            </p>
-            <p>Author: {{$post->user->title}}</p>
+            <h1>{{$category->name}}</h1>
         </div>
     </div>
 </div>

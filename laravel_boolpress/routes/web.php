@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,8 +16,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'HomeController@index')->name('guest-homepage');
-Route::get('/posts', 'PostController@index')->name('posts.index');
-Route::get('/posts/{slug}', 'PostController@show')->name('posts.show');
+
+Route::prefix('posts')
+        ->group(function () {
+            Route::get('/', 'PostController@index')->name('posts.index');
+            Route::get('/{slug}', 'PostController@show')->name('posts.show');
+
+        });
+
+Route::prefix('categories')
+        ->group(function () {
+            Route::get('/', 'CategoryController@index')->name('categories.index');
+            Route::get('/{slug}', 'CategoryController@show')->name('categories.show');
+
+        });  
+
+
 
 
 Auth::routes();
@@ -28,6 +43,14 @@ Route::prefix('admin')
     ->middleware('auth')
     ->group(function () {
         Route::get('/', 'HomeController@index')->name('admin-homepage');
-        Route::resource('/posts', 'PostController');
+        Route::resource('/posts', PostController::class)->names([
+            'index'=> 'admin.posts.index',
+            'create'=> 'admin.posts.create',
+            'delete'=> 'admin.posts.destroy',
+            'update'=> 'admin.posts.update',
+            'show'=> 'admin.posts.show',
+            'edit'=> 'admin.posts.edit',
+            'store'=> 'admin.posts.store',
+        ]);
 
 });

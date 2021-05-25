@@ -11,7 +11,7 @@ class PostController extends Controller
         $data = [
             'posts' => Post::all()
         ];
-        return view('guest.posts.index', $data);
+        return view('admin.posts.index', $data);
     }
     public function show($slug) {
         $post = Post::where('slug', $slug)->first();
@@ -20,7 +20,7 @@ class PostController extends Controller
             abort(404);
         }
         $data = ['post' => $post];
-        return view('guest.posts.show', $data);
+        return view('posts.show', $data);
         
     }
 }
